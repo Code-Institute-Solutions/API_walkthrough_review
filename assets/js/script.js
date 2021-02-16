@@ -2,7 +2,25 @@ const API_KEY = "r7eSqXkDRjn7qI7VWTkmReizoGM";
 const API_URL = "https://ci-jshint.herokuapp.com/api"
 
 document.getElementById("submit").addEventListener("click", e => processForm(e));
+document.getElementById("status").addEventListener("click", e => getStatus(e));
 
+async function getStatus(e) {
+
+    const queryString = `${API_URL}?api_key=${API_KEY}`;
+
+    console.log(queryString);
+
+    const response = await fetch(queryString);
+
+    const data = await response.json();
+
+    if (response.ok) {
+        displayStatus(data);
+    } else {
+        throw new Error(data.error);
+    }
+
+}
 
 async function processForm(e) {
 
@@ -11,7 +29,7 @@ async function processForm(e) {
     const response = await fetch(API_URL, {
         method: "POST",
         headers: {
-            "api-key": API_KEY,
+            "Authorization": API_KEY,
         },
         body: form
     });
@@ -19,15 +37,16 @@ async function processForm(e) {
     const data = await response.json();
     
     if (response.ok) {
-        displayResponse(data);
+        displayErrors(data);
     } else {
         throw new Error(data.error);
     }
 
 }
 
-function displayResponse(data) {
-    console.log(data)
+function displayErrors(data) {
+    
+    let results = "";
 
     let heading = `JSHint Results for ${data.file}`;
     if (data.total_errors === 0) {
@@ -42,6 +61,16 @@ function displayResponse(data) {
     }
 
     document.getElementById("resultsModalTitle").innerText = heading;
-    document.getElementById("modal-content").innerHTML = results;
+    document.getElementById("results-content").innerHTML = results;
     $('#resultsModal').modal("show");
+}
+
+function displayStatus(data) {
+
+    let results = `<div>Your key is valid until</div>`;
+    results += `<div class="key-status">${data.expiry}</div>`;
+
+    document.getElementById("status-content").innerHTML = results;
+    $("#statusModal").modal("show");
+
 }

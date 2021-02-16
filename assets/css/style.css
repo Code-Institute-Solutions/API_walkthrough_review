@@ -34,6 +34,10 @@
   box-shadow: 0 0 1px rgba(255, 255, 255, .5);
 }
 
+body {
+    margin-top: 10px;
+}
+
 textarea  
 {  
    font-family: "Menlo", 'Courier New', Courier, monospace;  
