@@ -1,5 +1,5 @@
 const API_KEY = "r7eSqXkDRjn7qI7VWTkmReizoGM";
-const API_URL = "https://ci-jshint.herokuapp.com/api"
+const API_URL = "https://ci-jshint.herokuapp.com/api";
 
 document.getElementById("submit").addEventListener("click", e => processForm(e));
 document.getElementById("status").addEventListener("click", e => getStatus(e));
@@ -31,7 +31,7 @@ async function processForm(e) {
         headers: {
             "Authorization": API_KEY,
         },
-        body: form
+        body: form,
     });
         
     const data = await response.json();
@@ -52,11 +52,11 @@ function displayErrors(data) {
     if (data.total_errors === 0) {
         results = `<div class="no_errors">No errors reported!</div>`;
     } else {
-        results = `<div>Total Errors: <span class="error_count">${data.total_errors}</span></div>`
+        results = `<div>Total Errors: <span class="error_count">${data.total_errors}</span></div>`;
         for (let error of data.error_list) {
-            results += `<div>At line <span class="line">${error.line}</span>, `
-            results += `column <span class="column">${error.col}:</span></div>`
-            results += `<div class="error">${error.error}</div>`
+            results += `<div>At line <span class="line">${error.line}</span>, `;
+            results += `column <span class="column">${error.col}:</span></div>`;
+            results += `<div class="error">${error.error}</div>`;
         }
     }
 
@@ -67,10 +67,12 @@ function displayErrors(data) {
 
 function displayStatus(data) {
 
+    let heading = "API Key Status";
     let results = `<div>Your key is valid until</div>`;
     results += `<div class="key-status">${data.expiry}</div>`;
 
-    document.getElementById("status-content").innerHTML = results;
-    $("#statusModal").modal("show");
+    document.getElementById("resultsModalTitle").innerText = heading;
+    document.getElementById("results-content").innerHTML = results;
+    $("#resultsModal").modal("show");
 
 }
