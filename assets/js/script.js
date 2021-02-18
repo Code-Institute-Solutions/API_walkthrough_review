@@ -21,9 +21,7 @@ function processOptions(form) {
 
     form.delete("options");
     
-    if (optArray.length > 0) {
-        form.append("options", optArray.join())
-    }
+    form.append("options", optArray.join())
     
     return form
 }
