@@ -20,7 +20,11 @@ function processOptions(form) {
     }
 
     form.delete("options");
-    form.append("options", optArray.join())
+    
+    if (optArray.length > 0) {
+        form.append("options", optArray.join())
+    }
+    
     return form
 }
 
@@ -54,13 +58,7 @@ async function getStatus(e) {
  */
 async function processForm(e) {
 
-    let form = new FormData(document.getElementById("checksform"));
-
-    form = processOptions(form);
-
-    for (e of form.entries()) {
-        console.log(e)
-    }
+    const form = processOptions(new FormData(document.getElementById("checksform")));
 
     const response = await fetch(API_URL, {
         method: "POST",
