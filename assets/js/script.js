@@ -1,9 +1,35 @@
 const API_KEY = "r7eSqXkDRjn7qI7VWTkmReizoGM";
 const API_URL = "https://ci-jshint.herokuapp.com/api";
+const resultsModal = new bootstrap.Modal(document.getElementById("resultsModal"))
 
 document.getElementById("submit").addEventListener("click", e => processForm(e));
 document.getElementById("status").addEventListener("click", e => getStatus(e));
 
+/**
+ * Returns a FormData object with the correct options format
+ * @function processOptions
+ * @param {FormData} form 
+ */
+function processOptions(form) {
+    let optArray = [];
+
+    for (let e of form.entries()) {
+        if (e[0] === "options") {
+            optArray.push(e[1]);
+        }
+    }
+
+    form.delete("options");
+    form.append("options", optArray.join())
+    return form
+}
+
+/**
+ * Performs a GET request to the API URL and calls the
+ * displayStatus function
+ * @function getStatus
+ * @param {event object} e 
+ */
 async function getStatus(e) {
 
     const queryString = `${API_URL}?api_key=${API_KEY}`;
@@ -20,9 +46,21 @@ async function getStatus(e) {
 
 }
 
+/**
+ * Performs a POST request to the API URL with the form contents
+ * and calls the displayErrors function
+ * @function processForm
+ * @param {event object} e 
+ */
 async function processForm(e) {
 
-    const form = new FormData(document.getElementById("checksform"));
+    let form = new FormData(document.getElementById("checksform"));
+
+    form = processOptions(form);
+
+    for (e of form.entries()) {
+        console.log(e)
+    }
 
     const response = await fetch(API_URL, {
         method: "POST",
@@ -42,6 +80,11 @@ async function processForm(e) {
 
 }
 
+/**
+ * Formats the returned JSON and displays the results
+ * @function displayErrors
+ * @param {json object} data 
+ */
 function displayErrors(data) {
     
     let results = "";
@@ -60,9 +103,14 @@ function displayErrors(data) {
 
     document.getElementById("resultsModalTitle").innerText = heading;
     document.getElementById("results-content").innerHTML = results;
-    $('#resultsModal').modal("show");
+    resultsModal.show();
 }
 
+/**
+ * Formats the returned JSON and displays the results
+ * @function displayStatus
+ * @param {json object} data 
+ */
 function displayStatus(data) {
 
     let heading = "API Key Status";
@@ -71,6 +119,6 @@ function displayStatus(data) {
 
     document.getElementById("resultsModalTitle").innerText = heading;
     document.getElementById("results-content").innerHTML = results;
-    $("#resultsModal").modal("show");
+    resultsModal.show();
 
 }

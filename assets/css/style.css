@@ -40,7 +40,8 @@ body {
 
 textarea  
 {  
-   font-family: "Menlo", 'Courier New', Courier, monospace;  
+   font-family: "Menlo", 'Courier New', Courier, monospace;
+   height: 25vh;
 }
 
 .modal-body {
